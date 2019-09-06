@@ -1,6 +1,6 @@
 <template>
   <a-layout id="components-layout-demo-top-side-2">
-    <a-layout-header class="header">
+    <a-layout-header class="header" :style="{ position: 'fixed', zIndex: 1, width: '100%' }">
       <div class="logo" />
       <a-menu
         mode="horizontal"
@@ -13,22 +13,27 @@
         <a-menu-item key="3">nav 3</a-menu-item>
       </a-menu>
     </a-layout-header>
-    <a-layout>
-      <a-layout-sider width="200" style="background: #fff">
+    <a-layout :style="{paddingTop: '64px', minHeight: '100vh'}">
+      <a-layout-sider width="200" :style="{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0 }">
         <a-menu
           mode="inline"
-          theme="dark"
-          :defaultSelectedKeys="['1']"
-          :defaultOpenKeys="['sub1']"
+          :defaultSelectedKeys="defaultSelectedKeys"
+          :defaultOpenKeys="defaultOpenKeys"
           :style="{ height: '100%', borderRight: 0 }"
         >
           <a-sub-menu key="sub1">
             <span slot="title">
               <a-icon type="user" />subnav 1
             </span>
-            <a-menu-item key="1">option1</a-menu-item>
-            <a-menu-item key="2">option2</a-menu-item>
-            <a-menu-item key="3">option3</a-menu-item>
+            <a-menu-item key="home">
+                <router-link to="/home">Home</router-link>
+            </a-menu-item>
+            <a-menu-item key="about">
+                <router-link to="/about">About</router-link>
+            </a-menu-item>
+            <a-menu-item key="table">
+                <router-link to="/table">表格</router-link>
+            </a-menu-item>
             <a-menu-item key="4">option4</a-menu-item>
           </a-sub-menu>
           <a-sub-menu key="sub2">
@@ -51,7 +56,7 @@
           </a-sub-menu>
         </a-menu>
       </a-layout-sider>
-      <a-layout style="padding: 0 24px 24px">
+      <a-layout :style="{ margin: '0 24px 24px 224px' }">
         <a-breadcrumb style="margin: 16px 0">
           <a-breadcrumb-item>Home</a-breadcrumb-item>
           <a-breadcrumb-item>List</a-breadcrumb-item>
@@ -71,6 +76,22 @@ export default {
   data () {
     return {
       collapsed: false
+    }
+  },
+  mounted () {
+    console.log(this.$route)
+  },
+  computed: {
+    defaultSelectedKeys () {
+      return [this.$route.meta.key]
+    },
+    defaultOpenKeys () {
+      return ['sub1']
+    }
+  },
+  methods: {
+    updateMenu () {
+      console.log(this.$route)
     }
   }
 }

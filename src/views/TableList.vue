@@ -21,7 +21,8 @@
       </a-row>
       <a-row>
         <a-col :span="24" :style="{ textAlign: 'right' }">
-          <a-button type="primary" html-type="submit">查询</a-button>
+          <a-button type="primary" @click="showModal">弹窗</a-button>
+          <a-button :style="{ marginLeft: '8px' }" type="primary" html-type="submit">查询</a-button>
           <a-button :style="{ marginLeft: '8px' }" @click="handleReset">清除</a-button>
           <a v-if="count > 7" :style="{ marginLeft: '8px', fontSize: '12px' }" @click="toggle">
             展开
@@ -54,6 +55,13 @@
         </a-col>
       </a-row>
     </div>
+    <a-modal
+      title="弹窗"
+      v-model="visible"
+      @ok="handleOk"
+    >
+     <a-button>sdfsf</a-button>
+    </a-modal>
   </div>
 </template>
 <script>
@@ -74,7 +82,9 @@ export default {
         pageSizeOptions: ['10', '20', '30', '40', '50'],
         showQuickJumper: true
       },
-      loading: false
+      loading: false,
+      visible: false,
+      testData: ['ss', '33']
     }
   },
   computed: {
@@ -84,6 +94,8 @@ export default {
   },
   mounted () {
     this._getFromData()
+
+    console.log(this.testData.join(''))
   },
   methods: {
     _getFromData () {
@@ -139,6 +151,12 @@ export default {
 
     toggle () {
       this.expand = !this.expand
+    },
+    showModal () {
+      this.visible = true
+    },
+    handleOk (e) {
+      console.log(e)
     }
   }
 }
