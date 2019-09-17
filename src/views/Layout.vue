@@ -1,10 +1,9 @@
 <template>
   <a-layout id="components-layout-demo-top-side-2">
-    <a-layout-header class="header" :style="{ position: 'fixed', zIndex: 1, width: '100%' }">
+    <a-layout-header class="header" :style="{ position: 'fixed', zIndex: 1, width: '100%', background: '#ffffff' }">
       <div class="logo" />
       <a-menu
         mode="horizontal"
-        theme="dark"
         :defaultSelectedKeys="['2']"
         :style="{ lineHeight: '64px' }"
       >
