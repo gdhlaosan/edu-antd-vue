@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
 
 Vue.use(Router)
 
@@ -11,19 +10,12 @@ export default new Router({
     {
       path: '/',
       name: 'layout',
-      redirect: '/table',
       component: () => import('./views/Layout.vue'),
       children: [{
         path: 'table',
         name: 'tableList',
         meta: { key: 'table' },
         component: () => import('./views/TableList.vue')
-      },
-      {
-        path: 'home',
-        name: 'home',
-        component: Home,
-        meta: { key: 'home' }
       },
       {
         path: 'about',
