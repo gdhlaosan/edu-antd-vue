@@ -1,5 +1,5 @@
 <template>
-    <a-layout-header class="layoutHeader">
+    <a-layout-header>
       <a-icon
           class="trigger"
           :type="collapsed ? 'menu-unfold' : 'menu-fold'"
@@ -13,6 +13,9 @@ export default {
   computed: {
     collapsed () {
       return this.$store.state.collapsed
+    },
+    contentWidth () {
+      return this.$store.getters.contentWidth
     }
   },
   methods: {
@@ -24,14 +27,6 @@ export default {
 </script>
 
 <style lang="less">
-.layoutHeader {
-  position: fixed;
-  z-index: 1;
-  width: 100%;
-  background: #fff;
-   padding: 0;
-   box-shadow: 0 1px 4px rgba(0,21,41,.08);
-}
 .trigger {
   font-size: 18px;
   line-height: 64px;

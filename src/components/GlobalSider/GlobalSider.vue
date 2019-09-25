@@ -1,5 +1,12 @@
 <template>
-  <a-layout-sider :trigger="null" collapsible v-model="collapsed" theme="light" class="layoutSider">
+  <a-layout-sider
+    :trigger="null"
+    collapsible
+    v-model="collapsed"
+    theme="light"
+    class="layoutSider"
+    :width="siderWidth"
+  >
     <div class="logo">
       <span class="logo-img">OMS</span>
       <span class="logo-text" :style="{display: collapsed ? 'none' : 'inline'}"> 在线阅卷系统</span>
@@ -45,6 +52,8 @@
 </template>
 
 <script>
+import { siderWidth } from '@/assets/common/common.js'
+
 export default {
   computed: {
     collapsed () {
@@ -53,6 +62,7 @@ export default {
   },
   data () {
     return {
+      siderWidth: siderWidth,
       rootSubmenuKeys: ['sub1', 'sub2', 'sub4'],
       openKeys: ['sub2']
     }

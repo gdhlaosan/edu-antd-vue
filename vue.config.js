@@ -1,3 +1,5 @@
+const path = require('path')
+
 module.exports = {
   css: {
     loaderOptions: {
@@ -9,6 +11,12 @@ module.exports = {
         },
         javascriptEnabled: true
       }
+    }
+  },
+  pluginOptions: {
+    'style-resources-loader': {
+      preProcessor: 'less',
+      patterns: [path.resolve(__dirname, 'src/assets/common/common.less')] // 引入公共文件
     }
   }
 }
