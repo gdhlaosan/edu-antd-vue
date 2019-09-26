@@ -9,6 +9,9 @@ import store from './store'
 import Antd from 'ant-design-vue'
 import 'ant-design-vue/dist/antd.css'
 
+import https from './https.js'
+Vue.prototype.$http = https
+
 Vue.use(Antd)
 
 Vue.config.productionTip = false

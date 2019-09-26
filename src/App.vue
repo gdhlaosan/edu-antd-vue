@@ -14,6 +14,12 @@ export default {
     return {
       Chinese
     }
+  },
+  created () {
+    this.$http.fetchGet('/ClientsData/GetClientsDataJson', { r: Math.random() })
+      .then((data) => {
+
+      })
   }
 }
 </script>
