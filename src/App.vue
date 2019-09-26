@@ -16,9 +16,9 @@ export default {
     }
   },
   created () {
-    this.$http.fetchGet('/ClientsData/GetClientsDataJson', { r: Math.random() })
+    this.$http.fetchGet('/Role/GetRoleSelectJsonByRoleType', { roleType: 2, _: 1569471911289 })
       .then((data) => {
-
+        console.log(data)
       })
   }
 }

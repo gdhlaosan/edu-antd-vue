@@ -20,17 +20,4 @@ module.exports = {
     }
   },
   publicPath: process.env.NODE_ENV === 'production' ? '/np/' : '/'
-  // axios域代理，解决axios跨域问题
-  // devServer: {
-  //   proxy: {
-  //     '/api': {
-  //       target: 'http://172.16.16.212:40020',
-  //       changeOrigin: true,
-  //       ws: true,
-  //       pathRewrite: {
-  //         '^/api': ''
-  //       }
-  //     }
-  //   }
-  // }
 }
