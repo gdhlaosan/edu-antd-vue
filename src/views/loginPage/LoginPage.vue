@@ -1,7 +1,7 @@
 <template>
-    <a-layout-content>
-        <router-view></router-view>
-    </a-layout-content>
+    <div>
+        <router-link to="layout">loginPage</router-link>
+    </div>
 </template>
 
 <script>

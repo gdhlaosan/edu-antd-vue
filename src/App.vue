@@ -16,7 +16,7 @@ export default {
     }
   },
   created () {
-    this.$http.fetchGet('/Role/GetRoleSelectJsonByRoleType', { roleType: 2, _: 1569471911289 })
+    this.$http.fetchGet('/ExamPlan/GetAllExamJson', {})
       .then((data) => {
         console.log(data)
       })

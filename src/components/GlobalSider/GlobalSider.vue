@@ -20,8 +20,8 @@
           <a-icon type="mail" />
           <span>Navigation One</span>
         </span>
-        <a-menu-item key="1">Option 1</a-menu-item>
-        <a-menu-item key="2">Option 2</a-menu-item>
+        <a-menu-item key="1" @click="changeRouter('home')">homePage</a-menu-item>
+        <a-menu-item key="2" @click="changeRouter('table')">tablePage</a-menu-item>
         <a-menu-item key="3">Option 3</a-menu-item>
         <a-menu-item key="4">Option 4</a-menu-item>
       </a-sub-menu>
@@ -77,6 +77,9 @@ export default {
       } else {
         this.openKeys = latestOpenKey ? [latestOpenKey] : []
       }
+    },
+    changeRouter (changeRouter) {
+      this.$router.push(changeRouter)
     }
   }
 }
