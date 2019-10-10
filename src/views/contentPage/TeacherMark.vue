@@ -1,7 +1,5 @@
 <template>
-    <div>
-        欢迎访问OMS阅卷系统
-    </div>
+    <div>教师评阅分配</div>
 </template>
 
 <script>

@@ -14,38 +14,18 @@
     <a-menu mode="inline"
         :openKeys="openKeys"
         @openChange="onOpenChange"
+        :defaultSelectedKeys="defaultSelectedKeys"
     >
-      <a-sub-menu key="sub1">
+      <a-sub-menu v-for="menu in authorizeMenu" :key="menu.pId">
         <span slot="title">
           <a-icon type="mail" />
-          <span>Navigation One</span>
+          <span>{{menu.realName}}</span>
         </span>
-        <a-menu-item key="1" @click="changeRouter('home')">homePage</a-menu-item>
-        <a-menu-item key="2" @click="changeRouter('table')">tablePage</a-menu-item>
-        <a-menu-item key="3">Option 3</a-menu-item>
-        <a-menu-item key="4">Option 4</a-menu-item>
-      </a-sub-menu>
-      <a-sub-menu key="sub2">
-        <span slot="title">
-          <a-icon type="appstore" />
-          <span>Navigation Two</span>
-        </span>
-        <a-menu-item key="5">Option 5</a-menu-item>
-        <a-menu-item key="6">Option 6</a-menu-item>
-        <a-sub-menu key="sub3" title="Submenu">
-          <a-menu-item key="7">Option 7</a-menu-item>
-          <a-menu-item key="8">Option 8</a-menu-item>
-        </a-sub-menu>
-      </a-sub-menu>
-      <a-sub-menu key="sub4">
-        <span slot="title">
-          <a-icon type="setting" />
-          <span>Navigation Three</span>
-        </span>
-        <a-menu-item key="9">Option 9</a-menu-item>
-        <a-menu-item key="10">Option 10</a-menu-item>
-        <a-menu-item key="11">Option 11</a-menu-item>
-        <a-menu-item key="12">Option 12</a-menu-item>
+        <a-menu-item
+          v-for="item in menu.ChildNodes"
+          :key="item.pId"
+          @click="changeRouter(item.pName)"
+        >{{item.realName}}</a-menu-item>
       </a-sub-menu>
     </a-menu>
   </a-layout-sider>
@@ -58,14 +38,30 @@ export default {
   computed: {
     collapsed () {
       return this.$store.state.collapsed
+    },
+    authorizeMenu () {
+      return this.$store.state.authorizeMenu
+    },
+    rootSubmenuKeys () {
+      const rootKeys = []
+      this.$store.state.authorizeMenu.forEach(elem => {
+        rootKeys.push(elem.pId)
+      })
+      return rootKeys
+    },
+    // 默认选中菜单项
+    defaultSelectedKeys () {
+      return this.$route.meta.key ? [this.$route.meta.key] : []
     }
   },
   data () {
     return {
       siderWidth: siderWidth,
-      rootSubmenuKeys: ['sub1', 'sub2', 'sub4'],
-      openKeys: ['sub2']
+      openKeys: this.$route.meta.preKey ? [this.$route.meta.preKey] : [] // 展开的菜单项
     }
+  },
+  mounted () {
+    this.$store.dispatch('getSiderData')
   },
   methods: {
     onOpenChange (openKeys) {

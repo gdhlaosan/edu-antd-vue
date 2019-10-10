@@ -14,12 +14,6 @@ export default {
     return {
       Chinese
     }
-  },
-  created () {
-    this.$http.fetchGet('/ExamPlan/GetAllExamJson', {})
-      .then((data) => {
-        console.log(data)
-      })
   }
 }
 </script>

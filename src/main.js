@@ -10,7 +10,10 @@ import Antd from 'ant-design-vue'
 import 'ant-design-vue/dist/antd.css'
 
 import https from './https.js'
+import { API } from '@/config/config.js'
+
 Vue.prototype.$http = https
+Vue.prototype.API = API
 
 Vue.use(Antd)
 

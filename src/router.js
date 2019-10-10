@@ -3,7 +3,7 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [{
@@ -21,13 +21,32 @@ export default new Router({
       name: 'HomePage',
       component: () => import('./views/contentPage/HomePage.vue')
     }, {
-      path: 'table',
-      name: 'TablePage',
-      component: () => import('./views/contentPage/TablePage.vue')
+      path: 'TeacherManage',
+      name: 'TeacherManage',
+      component: () => import('./views/contentPage/TeacherManage.vue'),
+      meta: {
+        preKey: 3047,
+        key: 14,
+        name: '教师管理'
+      }
     }, {
-      path: 'table',
-      name: 'tableList',
-      component: () => import('./views/TableList.vue')
+      path: 'TeacherMark',
+      name: 'TeacherMark',
+      component: () => import('./views/contentPage/TeacherMark.vue'),
+      meta: {
+        preKey: 3047,
+        key: 16,
+        name: '教师评阅分配'
+      }
+    }, {
+      path: 'TeacherMarkImport',
+      name: 'TeacherMarkImport',
+      component: () => import('./views/contentPage/TeacherMarkImport.vue'),
+      meta: {
+        preKey: 3047,
+        key: 3046,
+        name: '评阅分配结果导入'
+      }
     },
     {
       path: 'about',
@@ -41,3 +60,5 @@ export default new Router({
   }
   ]
 })
+
+export default router
