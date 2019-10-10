@@ -53,18 +53,51 @@
       </a-row>
     </a-form>
     <div class="search-result-list">
-      查询结果
+      <a-table
+        :rowKey="record => record.userId"
+        :columns="columns"
+        :dataSource="data"
+        :pagination="pagination"
+        :loading="loading"
+        @change="handleTableChange"
+    >
+        <!-- <template slot="name" slot-scope="name">
+        {{name.first}} {{name.last}}
+        </template> -->
+    </a-table>
     </div>
   </div>
 </template>
 <script>
-
+const columns = [{
+  title: '教师用户名',
+  dataIndex: 'userName',
+  scopedSlots: { customRender: 'userName' }
+}, {
+  title: '教师姓名',
+  dataIndex: 'realName'
+}, {
+  title: '角色',
+  dataIndex: 'roleName'
+}, {
+  title: '状态',
+  dataIndex: 'State'
+}, {
+  title: '课程名称',
+  dataIndex: 'courseName'
+}]
 export default {
   data () {
     return {
       expand: false,
       form: this.$form.createForm(this),
-      userList: []
+      userList: [],
+      loading: false,
+      pagination: {
+        showSizeChanger: true
+      },
+      data: [],
+      columns
     }
   },
   mounted () {
@@ -74,11 +107,21 @@ export default {
   methods: {
     handleSearch (e) {
       e.preventDefault()
+      this.loading = true
       this.form.validateFields((error, values) => {
         if (!error) {
           // 查询表格数据
+          Object.assign(values, {
+            page: 1,
+            rows: 15
+          })
           this.$http.fetchGet(`${this.API}/Teacher/GetTeacherCourseGridJson`, values).then((oJson) => {
-
+            console.log(oJson)
+            const pagination = { ...this.pagination }
+            pagination.total = oJson.data.total
+            this.loading = false
+            this.data = oJson.data.rows
+            this.pagination = pagination
           })
         }
       })
@@ -97,6 +140,11 @@ export default {
         })
         this.userList = oJson.data
       })
+    },
+    handleTableChange (pagination, filters, sorter) {
+      console.log(pagination)
+      console.log(filters)
+      console.log(sorter)
     }
   }
 }
@@ -126,7 +174,6 @@ export default {
   border-radius: 6px;
   background-color: #fafafa;
   min-height: 200px;
-  text-align: center;
-  padding-top: 80px;
+  padding: 10px;
 }
 </style>
