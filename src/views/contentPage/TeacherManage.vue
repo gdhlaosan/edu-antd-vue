@@ -3,7 +3,6 @@
     <a-form
       class="ant-advanced-search-form"
       :form="form"
-      @submit="handleSearch"
     >
       <a-row :gutter="24">
           <a-col :span="6">
@@ -39,7 +38,7 @@
         >
           <a-button
             type="primary"
-            html-type="submit"
+            @click="handleSearch"
           >
             查询
           </a-button>
@@ -61,15 +60,36 @@
         :loading="loading"
         @change="handleTableChange"
     >
-        <!-- <template slot="name" slot-scope="name">
-        {{name.first}} {{name.last}}
-        </template> -->
+        <template slot="State" slot-scope="text, record">
+          <a-tag v-if="record.state === 1" color="#87d068">{{text}}</a-tag>
+          <a-tag v-else color="gray">{{text}}</a-tag>
+        </template>
+        <template slot="courseName" slot-scope="text">
+          <a-tooltip v-if="text !== null" placement="top">
+            <template slot="title">
+              <span>{{text}}</span>
+            </template>
+            <span class="courseName">{{text}}</span>
+          </a-tooltip>
+          <a-tag v-else color="green">未设置</a-tag>
+        </template>
+        <template slot="operate">
+          <a class="operateItem">修改</a>
+          <a class="operateItem">删除教师</a>
+          <a class="operateItem">删除课程</a>
+        </template>
     </a-table>
     </div>
   </div>
 </template>
 <script>
 const columns = [{
+  title: '序号',
+  scopedSlots: { customRender: 'order' },
+  customRender: (text, row, index) => {
+    return index + 1
+  }
+}, {
   title: '教师用户名',
   dataIndex: 'userName',
   scopedSlots: { customRender: 'userName' }
@@ -81,10 +101,16 @@ const columns = [{
   dataIndex: 'roleName'
 }, {
   title: '状态',
-  dataIndex: 'State'
+  dataIndex: 'State',
+  scopedSlots: { customRender: 'State' }
 }, {
   title: '课程名称',
-  dataIndex: 'courseName'
+  dataIndex: 'courseName',
+  scopedSlots: { customRender: 'courseName' }
+}, {
+  title: '操作',
+  scopedSlots: { customRender: 'operate' },
+  align: 'center'
 }]
 export default {
   data () {
@@ -97,6 +123,10 @@ export default {
         showSizeChanger: true
       },
       data: [],
+      pagePara: {
+        page: 1,
+        rows: 10
+      },
       columns
     }
   },
@@ -105,27 +135,6 @@ export default {
     this._getUserList()
   },
   methods: {
-    handleSearch (e) {
-      e.preventDefault()
-      this.loading = true
-      this.form.validateFields((error, values) => {
-        if (!error) {
-          // 查询表格数据
-          Object.assign(values, {
-            page: 1,
-            rows: 15
-          })
-          this.$http.fetchGet(`${this.API}/Teacher/GetTeacherCourseGridJson`, values).then((oJson) => {
-            console.log(oJson)
-            const pagination = { ...this.pagination }
-            pagination.total = oJson.data.total
-            this.loading = false
-            this.data = oJson.data.rows
-            this.pagination = pagination
-          })
-        }
-      })
-    },
     handleReset () {
       this.form.resetFields()
     },
@@ -142,9 +151,38 @@ export default {
       })
     },
     handleTableChange (pagination, filters, sorter) {
-      console.log(pagination)
-      console.log(filters)
-      console.log(sorter)
+      const pager = { ...this.pagination }
+      pager.current = pagination.current
+      this.pagination = pager
+      this.pagePara = {
+        rows: pagination.pageSize,
+        page: pagination.current
+      }
+      this.handleSearch({
+        rows: pagination.pageSize,
+        page: pagination.current,
+        ...filters
+      })
+    },
+    handleSearch (params = {}) {
+      console.log(params)
+      this.loading = true
+      this.form.validateFields((error, values) => {
+        if (!error) {
+          // 查询表格数据
+          Object.assign(values, this.pagePara, params)
+          for (let key in values) {
+            values[key] = !values[key] ? '' : values[key]
+          }
+          this.$http.fetchGet(`${this.API}/Teacher/GetTeacherCourseGridJson`, values).then((oJson) => {
+            this.data = oJson.data.rows
+            const pagination = { ...this.pagination }
+            pagination.total = oJson.data.records
+            this.loading = false
+            this.pagination = pagination
+          })
+        }
+      })
     }
   }
 }
@@ -174,6 +212,17 @@ export default {
   border-radius: 6px;
   background-color: #fafafa;
   min-height: 200px;
-  padding: 10px;
+  padding: 0 10px;
+}
+
+.courseName {
+  display: inline-block;
+  width: 100px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.operateItem {
+  padding: 0 5px;
 }
 </style>
