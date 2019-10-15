@@ -5,6 +5,7 @@
           :type="collapsed ? 'menu-unfold' : 'menu-fold'"
           @click="chageCollapsed"
       />
+      <span @click="toLogin">退出</span>
     </a-layout-header>
 </template>
 
@@ -21,6 +22,11 @@ export default {
   methods: {
     chageCollapsed () {
       this.$store.commit('changeCollapsed')
+    },
+    toLogin () {
+      this.$store.commit('signOut')
+      // 必须用window.location.href来跳转 是为了刷新页面重置router 否则再次登录路由重复
+      window.location.href = '/'
     }
   }
 }

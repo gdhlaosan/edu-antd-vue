@@ -60,9 +60,6 @@ export default {
       openKeys: this.$route.meta.preKey ? [this.$route.meta.preKey] : [] // 展开的菜单项
     }
   },
-  mounted () {
-    this.$store.dispatch('getSiderData')
-  },
   methods: {
     onOpenChange (openKeys) {
       const latestOpenKey = openKeys.find(

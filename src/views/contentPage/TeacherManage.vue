@@ -51,6 +51,11 @@
         </a-col>
       </a-row>
     </a-form>
+    <div class="btnList">
+      <a-button type="primary">新建</a-button>
+      <a-button type="primary">导入</a-button>
+      <a-button type="primary">导出</a-button>
+    </div>
     <div class="search-result-list">
       <a-table
         :rowKey="record => record.userId"
@@ -73,10 +78,10 @@
           </a-tooltip>
           <a-tag v-else color="green">未设置</a-tag>
         </template>
-        <template slot="operate">
+        <template slot="operate" slot-scope="text, record">
           <a class="operateItem">修改</a>
-          <a class="operateItem">删除教师</a>
-          <a class="operateItem">删除课程</a>
+          <a class="operateItem" @click="cancelTeacher(record)">删除教师</a>
+          <a class="operateItem" @click="cancelTeacher(record)">删除课程</a>
         </template>
     </a-table>
     </div>
@@ -106,7 +111,8 @@ const columns = [{
 }, {
   title: '课程名称',
   dataIndex: 'courseName',
-  scopedSlots: { customRender: 'courseName' }
+  scopedSlots: { customRender: 'courseName' },
+  align: 'center'
 }, {
   title: '操作',
   scopedSlots: { customRender: 'operate' },
@@ -165,7 +171,6 @@ export default {
       })
     },
     handleSearch (params = {}) {
-      console.log(params)
       this.loading = true
       this.form.validateFields((error, values) => {
         if (!error) {
@@ -182,6 +187,18 @@ export default {
             this.pagination = pagination
           })
         }
+      })
+    },
+    cancelTeacher (record) {
+      this.$confirm({
+        title: '确认要删除该项数据吗？',
+        centered: true,
+        onOk () {
+          return new Promise((resolve, reject) => {
+            setTimeout(Math.random() > 0.5 ? resolve : reject, 1000)
+          }).catch(() => console.log('Oops errors!'))
+        },
+        onCancel () {}
       })
     }
   }
@@ -217,12 +234,18 @@ export default {
 
 .courseName {
   display: inline-block;
-  width: 100px;
+  width: 125px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .operateItem {
   padding: 0 5px;
+}
+.btnList {
+  margin-top: 16px;
+  .ant-btn {
+    margin: 0 5px;
+  }
 }
 </style>

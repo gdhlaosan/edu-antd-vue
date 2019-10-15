@@ -1,5 +1,5 @@
 <template>
-    <div>评阅分配结果查询</div>
+    <div>抱歉没有找到该页面</div>
 </template>
 
 <script>
