@@ -25,8 +25,7 @@ export default {
     },
     toLogin () {
       this.$store.commit('signOut')
-      // 必须用window.location.href来跳转 是为了刷新页面重置router 否则再次登录路由重复
-      window.location.href = '/'
+      this.$router.push('/')
     }
   }
 }

@@ -1,5 +1,8 @@
 <template>
   <div id="components-form-demo-advanced-search">
+    <a-breadcrumb class="breadcrumb">
+      <a-breadcrumb-item v-for="(item, index) in $route.meta.breadcrumb" :key="index">{{item}}</a-breadcrumb-item>
+    </a-breadcrumb>
     <a-form
       class="ant-advanced-search-form"
       :form="form"
@@ -52,7 +55,7 @@
       </a-row>
     </a-form>
     <div class="btnList">
-      <a-button type="primary">新建</a-button>
+      <a-button type="primary" @click="addTeacher">新建</a-button>
       <a-button type="primary">导入</a-button>
       <a-button type="primary">导出</a-button>
     </div>
@@ -176,10 +179,9 @@ export default {
         if (!error) {
           // 查询表格数据
           Object.assign(values, this.pagePara, params)
-          for (let key in values) {
-            values[key] = !values[key] ? '' : values[key]
-          }
-          this.$http.fetchGet(`${this.API}/Teacher/GetTeacherCourseGridJson`, values).then((oJson) => {
+          // 格式化参数
+          const para = this.formatPara(values)
+          this.$http.fetchGet(`${this.API}/Teacher/GetTeacherCourseGridJson`, para).then((oJson) => {
             this.data = oJson.data.rows
             const pagination = { ...this.pagination }
             pagination.total = oJson.data.records
@@ -200,6 +202,10 @@ export default {
         },
         onCancel () {}
       })
+    },
+    // 新建教师
+    addTeacher () {
+      this.$router.push('teacherManageEdit')
     }
   }
 }

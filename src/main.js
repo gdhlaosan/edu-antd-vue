@@ -12,10 +12,14 @@ import 'ant-design-vue/dist/antd.css'
 import https from './https.js'
 import { API } from '@/config/config.js'
 
+// 引入公共方法
+import common from '@/assets/common/common'
+
 Vue.prototype.$http = https
 Vue.prototype.API = API
 
 Vue.use(Antd)
+Vue.use(common)
 
 Vue.config.productionTip = false
 
@@ -26,7 +30,6 @@ router.beforeEach((to, from, next) => {
   }
   next()
 })
-
 router.onReady(() => {
   const userId = localStorage.getItem('userId') // 判断用户已登录且已有权限
   if (userId) {

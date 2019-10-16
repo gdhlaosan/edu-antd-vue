@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 
 import $http from '@/https.js'
 import { API } from '@/config/config.js'
+import extraRoutes from './extraRoutes.js'
 
 Vue.use(Vuex)
 
@@ -39,6 +40,7 @@ export default new Vuex.Store({
             context.commit('changeSiderData', JSON.parse(oJson.data.authorizeMenu))
             localStorage.setItem('siderData', oJson.data.authorizeMenu)
             const siderList = JSON.parse(oJson.data.authorizeMenu)
+            console.log(siderList)
             let siderRouter = []
             // 动态配置路由
             siderList.forEach(element => {
@@ -48,9 +50,9 @@ export default new Vuex.Store({
                   name: item.pName,
                   component: () => import(`@/views/contentPage/${item.pName}.vue`),
                   meta: {
-                    preKey: item.parentId,
                     key: item.pId,
-                    name: item.realName
+                    preKey: item.parentId,
+                    breadcrumb: [element.realName, item.realName]
                   }
                 }
                 siderRouter.push(obj)
@@ -61,12 +63,24 @@ export default new Vuex.Store({
               name: 'HomePage',
               component: () => import('@/views/contentPage/HomePage.vue')
             })
+            // 添加额外的路由
+            const newSiderRouter = siderRouter.concat(extraRoutes)
+            newSiderRouter.push(
+              {
+                path: '/layout/404',
+                name: 'notFound',
+                component: () => import('@/views/contentPage/notFound.vue')
+              }, {
+                path: '*', // 此处需特别注意置于最底部
+                redirect: '/layout/404'
+              }
+            )
             const routes = [{
               path: '/layout',
               name: 'layout',
               redirect: '/layout/home',
               component: () => import('@/views/Layout.vue'),
-              children: siderRouter
+              children: newSiderRouter
             }]
             resolve(routes)
           })
