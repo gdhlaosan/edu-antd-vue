@@ -25,7 +25,6 @@ export default new Vuex.Store({
     signOut (state) {
       state.userId = ''
       localStorage.removeItem('userId')
-      localStorage.removeItem('addRoutes')
       localStorage.removeItem('siderData')
     }
   },
@@ -33,13 +32,45 @@ export default new Vuex.Store({
   },
   actions: {
     // 获取菜单数据
-    getSiderData (context, callback) {
-      $http.fetchGet(`${API}/ClientsData/GetClientsDataJson`, { r: Math.random() })
-        .then((oJson) => {
-          context.commit('changeSiderData', JSON.parse(oJson.data.authorizeMenu))
-          localStorage.setItem('siderData', oJson.data.authorizeMenu)
-          callback(JSON.parse(oJson.data.authorizeMenu))
-        })
+    getSiderData (context) {
+      return new Promise((resolve, reject) => {
+        $http.fetchGet(`${API}/ClientsData/GetClientsDataJson`, { r: Math.random() })
+          .then((oJson) => {
+            context.commit('changeSiderData', JSON.parse(oJson.data.authorizeMenu))
+            localStorage.setItem('siderData', oJson.data.authorizeMenu)
+            const siderList = JSON.parse(oJson.data.authorizeMenu)
+            let siderRouter = []
+            // 动态配置路由
+            siderList.forEach(element => {
+              element.ChildNodes.forEach(item => {
+                let obj = {
+                  path: item.pName,
+                  name: item.pName,
+                  component: () => import(`@/views/contentPage/${item.pName}.vue`),
+                  meta: {
+                    preKey: item.parentId,
+                    key: item.pId,
+                    name: item.realName
+                  }
+                }
+                siderRouter.push(obj)
+              })
+            })
+            siderRouter.unshift({
+              path: 'home',
+              name: 'HomePage',
+              component: () => import('@/views/contentPage/HomePage.vue')
+            })
+            const routes = [{
+              path: '/layout',
+              name: 'layout',
+              redirect: '/layout/home',
+              component: () => import('@/views/Layout.vue'),
+              children: siderRouter
+            }]
+            resolve(routes)
+          })
+      })
     }
   }
 })
