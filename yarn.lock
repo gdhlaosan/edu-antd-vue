@@ -1319,10 +1319,10 @@ ansi-styles@^3.2.0, ansi-styles@^3.2.1:
   dependencies:
     color-convert "^1.9.0"
 
-ant-design-vue@^1.3.16:
-  version "1.3.16"
-  resolved "https://registry.yarnpkg.com/ant-design-vue/-/ant-design-vue-1.3.16.tgz#b18f7fa265edc7c798a5a65d15d92d72d3a0beb1"
-  integrity sha512-4HZNGaAWOxkD1j05aMp8gU8z99vrz2lzmfcrjEQqTgr0gYBeHOuxq7U+NvZGuaIonYz4h/DlbBh/HK4fKdV/Xw==
+ant-design-vue@^1.4.1:
+  version "1.4.1"
+  resolved "http://r.cnpmjs.org/ant-design-vue/download/ant-design-vue-1.4.1.tgz#351078f5f5c49ebe03d45416c8d835ccd9607ce9"
+  integrity sha1-NRB49fXEnr4D1FQWyNg1zNlgfOk=
   dependencies:
     "@ant-design/icons" "^2.1.1"
     "@ant-design/icons-vue" "^2.0.0"

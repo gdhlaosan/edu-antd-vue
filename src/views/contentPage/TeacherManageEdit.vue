@@ -3,7 +3,7 @@
         <a-breadcrumb class="breadcrumb">
             <a-breadcrumb-item v-for="(item, index) in $route.meta.breadcrumb" :key="index">{{item}}</a-breadcrumb-item>
         </a-breadcrumb>
-        <a-form :form="form" @submit="saveAddTeacher">
+        <a-form :form="form">
             <div class="formTitle">账号信息</div>
             <a-row :gutter="24">
                 <a-col :span="6">
@@ -25,6 +25,8 @@
                 <a-col :span="6">
                     <a-form-item label="角色">
                         <a-select
+                            mode="multiple"
+                            :filterOption="filterOption"
                             v-decorator="['roleId', {
                                 rules: [
                                     {
@@ -47,7 +49,8 @@
                 </a-col>
                 <a-col :span="6">
                     <a-form-item label="密码">
-                        <a-input
+                        <a-input-password
+                            :visibilityToggle="false"
                             v-decorator="['password', {
                                 rules: [
                                     {
@@ -107,7 +110,7 @@
                             placeholder="请选择"
                         >
                             <a-select-option
-                                v-for="item in userList"
+                                v-for="item in userGroupTypeList"
                                 :key="item.id"
                                 :value="item.id"
                             >
@@ -119,11 +122,13 @@
                 <a-col :span="6">
                     <a-form-item label="课程名称">
                         <a-select
+                             mode="multiple"
+                            :filterOption="filterOption"
                             v-decorator="['courseCode']"
                             placeholder="请选择"
                         >
                             <a-select-option
-                                v-for="item in userList"
+                                v-for="item in courseList"
                                 :key="item.id"
                                 :value="item.id"
                             >
@@ -202,7 +207,7 @@
                     <a-button
                         :style="{ marginLeft: '8px' }"
                         type="primary"
-                        html-type="submit"
+                        @click="saveAddTeacher"
                     >
                         保存
                     </a-button>
@@ -220,13 +225,7 @@ const residences = [
     children: [
       {
         value: 'hangzhou',
-        label: 'Hangzhou',
-        children: [
-          {
-            value: 'xihu',
-            label: 'West Lake'
-          }
-        ]
+        label: 'Hangzhou'
       }
     ]
   },
@@ -236,21 +235,27 @@ const residences = [
     children: [
       {
         value: 'nanjing',
-        label: 'Nanjing',
-        children: [
-          {
-            value: 'zhonghuamen',
-            label: 'Zhong Hua Men'
-          }
-        ]
+        label: 'Nanjing'
       }
     ]
   }
 ]
+const userGroupType = [{
+  id: '0',
+  text: '本校学生'
+}, {
+  id: '1',
+  text: '本校职工'
+}, {
+  id: '2',
+  text: '非本校'
+}]
 export default {
   data () {
     return {
       userList: [],
+      courseList: [],
+      userGroupTypeList: userGroupType,
       residences
     }
   },
@@ -258,26 +263,92 @@ export default {
     this.form = this.$form.createForm(this)
   },
   mounted () {
+    // 获取角色数据
     this.$http.fetchGet(`${this.API}/Role/GetRoleSelectJsonByRoleType`, {
       roleType: 2,
       _: Math.random()
     }).then((oJson) => {
       this.userList = oJson.data
+      // 判断时候是编辑
+      if (this.$route.query.userId) {
+        this.getRoleIds()
+      }
     })
+    // 获取课程名称
+    this.$http.fetchGet(`${this.API}/Teacher/GetCourseJson`, {
+      _: Math.random()
+    }).then((oJson) => {
+      this.courseList = oJson.data
+    })
+    // 判断时候是编辑
+    if (this.$route.query.userId) {
+      // 是编辑 请求教师默认数据
+      // 获取教师信息
+      this.$http.fetchGet(`${this.API}/Teacher/GetFormJson`, {
+        userId: this.$route.query.userId,
+        _: Math.random()
+      }).then((oJson) => {
+        const data = {}
+        Object.assign(data, oJson.data[0].user, oJson.data[0].userCourse)
+        data.courseCode = oJson.data[0].userCourse ? data.userCourse.split(',') : []
+        data.residence = [data.bankProvince, data.bankCity]
+        data.state = `${data.state}`
+        // data.userGroupType = data.userGroupType ? data.userGroupType : ''
+        delete data.userId
+        delete data.bankProvince
+        delete data.bankCity
+        delete data.userType
+        console.log(data)
+        this.form.setFieldsValue(data)
+      })
+    }
   },
   methods: {
     saveAddTeacher () {
-    //   this.form.validateFields((error, results) => {
-    //     console.log(results)
-    //   })
+      this.form.validateFields((error, results) => {
+        if (!error) {
+          // 格式化参数
+          const para = this.formatPara(results)
+          // 整理参数
+          para.roleId = para.roleId.length > 0 ? para.roleId.join(',') : ''
+          para.courseCode = para.courseCode.length > 0 ? para.courseCode.join(',') : ''
+          para.bankProvince = para.residence[0]
+          para.bankCity = para.residence[1]
+          para.userType = '2'
+          delete para.residence
+          this.$http.fetchPost(`${this.API}/Teacher/SubmitForm?keyValue=${this.$route.query.userId}`, para).then((oJson) => {
+            if (oJson.data.state === 'success') {
+              this.$message.success(oJson.data.message)
+              this.$router.push('TeacherManage')
+            } else {
+              this.$error({
+                centered: true,
+                title: oJson.data.message
+              })
+            }
+          })
+        }
+      })
     },
     historyBack () {
       this.$router.go(-1)
+    },
+    // 自定义下拉框搜索规则
+    filterOption (input, option) {
+      return (
+        option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
+      )
+    },
+    getRoleIds () {
+      this.$http.fetchPost(`${this.API}/Role/GetUserRoleIds`, {
+        userId: this.$route.query.userId
+      }).then((oJson) => {
+        this.form.setFieldsValue({ roleId: oJson.data })
+      })
     }
   }
 }
 </script>
 
 <style lang="less">
-
 </style>

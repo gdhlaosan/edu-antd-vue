@@ -55,9 +55,9 @@
       </a-row>
     </a-form>
     <div class="btnList">
-      <a-button type="primary" @click="addTeacher">新建</a-button>
-      <a-button type="primary">导入</a-button>
-      <a-button type="primary">导出</a-button>
+      <a-button type="primary" @click="editTeacher('')">新建</a-button>
+      <!-- <a-button type="primary">导入</a-button>
+      <a-button type="primary">导出</a-button> -->
     </div>
     <div class="search-result-list">
       <a-table
@@ -82,9 +82,9 @@
           <a-tag v-else color="green">未设置</a-tag>
         </template>
         <template slot="operate" slot-scope="text, record">
-          <a class="operateItem">修改</a>
-          <a class="operateItem" @click="cancelTeacher(record)">删除教师</a>
-          <a class="operateItem" @click="cancelTeacher(record)">删除课程</a>
+          <a class="operateItem" @click="editTeacher(record.userId)">修改</a>
+          <a class="operateItem" @click="cancelTeacher(record.userId, 1)">删除教师</a>
+          <a class="operateItem" @click="cancelTeacher(record.userId, 2)">删除课程</a>
         </template>
     </a-table>
     </div>
@@ -191,21 +191,30 @@ export default {
         }
       })
     },
-    cancelTeacher (record) {
+    cancelTeacher (userId, type) {
+      const _this = this
       this.$confirm({
         title: '确认要删除该项数据吗？',
         centered: true,
         onOk () {
-          return new Promise((resolve, reject) => {
-            setTimeout(Math.random() > 0.5 ? resolve : reject, 1000)
-          }).catch(() => console.log('Oops errors!'))
+          _this.$http.fetchPost(`${_this.API}/Teacher/DeleteForm`, { userId, type }).then((oJson) => {
+            if (oJson.data.state === 'success') {
+              _this.$message.success(oJson.data.message)
+              _this.handleSearch()
+            } else {
+              _this.$error({
+                centered: true,
+                title: oJson.data.message
+              })
+            }
+          })
         },
         onCancel () {}
       })
     },
-    // 新建教师
-    addTeacher () {
-      this.$router.push('teacherManageEdit')
+    // 新建/修改教师
+    editTeacher (userId) {
+      this.$router.push({ path: 'teacherManageEdit', query: { userId } })
     }
   }
 }

@@ -7,7 +7,7 @@
     >
       <global-header class="layoutHeader" :style="{width: `calc(100% - ${mainLeft})`}"></global-header>
       <a-layout class="layoutWapper">
-        <global-menu class="layoutMenu" :style="{width: `calc(100% - ${mainLeft})`}"></global-menu>
+        <!-- <global-menu class="layoutMenu" :style="{width: `calc(100% - ${mainLeft})`}"></global-menu> -->
         <global-content class="layoutcontent"></global-content>
       </a-layout>
     </a-layout>
@@ -17,7 +17,7 @@
 import GlobalHeader from '@/components/GlobalHeader/GlobalHeader'
 import GlobalContent from '@/components/GlobalContent/GlobalContent'
 import GlobalSider from '@/components/GlobalSider/GlobalSider'
-import GlobalMenu from '@/components/GlobalMenu/GlobalMenu'
+// import GlobalMenu from '@/components/GlobalMenu/GlobalMenu'
 
 import { siderWidth } from '@/assets/common/common.js'
 
@@ -25,8 +25,8 @@ export default {
   components: {
     GlobalHeader,
     GlobalContent,
-    GlobalSider,
-    GlobalMenu
+    GlobalSider
+    // GlobalMenu
   },
   computed: {
     mainLeft () {
@@ -60,7 +60,7 @@ export default {
       transition: all 0.2s;
     }
     .layoutcontent {
-      margin: 60px 16px 24px 16px;
+      margin: 16px 16px 24px 16px;
       padding: 24px;
       background: #ffffff;
     }
