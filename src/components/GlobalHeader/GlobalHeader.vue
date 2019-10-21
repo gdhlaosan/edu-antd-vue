@@ -5,7 +5,9 @@
           :type="collapsed ? 'menu-unfold' : 'menu-fold'"
           @click="chageCollapsed"
       />
-      <span @click="toLogin">退出</span>
+      <span class="logout" @click="toLogin">
+        <a-icon type="poweroff" /> 退出
+      </span>
     </a-layout-header>
 </template>
 
@@ -40,6 +42,16 @@ export default {
   transition: color .3s;
   &:hover {
     color: #1890ff;
+  }
+}
+.logout {
+  float: right;
+  margin-right: 30px;
+  padding: 0 15px;
+  cursor: pointer;
+  line-height: 64px;
+  &:hover {
+    background-color: #e6f7ff;
   }
 }
 </style>

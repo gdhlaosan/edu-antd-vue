@@ -9,13 +9,16 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    collapsed: false, // 菜单开闭状态
+    collapsed: document.documentElement.clientWidth <= 960, // 菜单开闭状态
     authorizeMenu: JSON.parse(localStorage.getItem('siderData')) || [],
     userId: ''
   },
   mutations: {
     changeCollapsed (state) {
       state.collapsed = !state.collapsed
+    },
+    windowResize (state, flag) {
+      state.collapsed = flag
     },
     changeSiderData (state, data) {
       state.authorizeMenu = data
@@ -40,7 +43,6 @@ export default new Vuex.Store({
             context.commit('changeSiderData', JSON.parse(oJson.data.authorizeMenu))
             localStorage.setItem('siderData', oJson.data.authorizeMenu)
             const siderList = JSON.parse(oJson.data.authorizeMenu)
-            console.log(siderList)
             let siderRouter = []
             // 动态配置路由
             siderList.forEach(element => {

@@ -5,8 +5,8 @@
         </a-breadcrumb>
         <a-form :form="form">
             <div class="formTitle">账号信息</div>
-            <a-row :gutter="24">
-                <a-col :span="6">
+            <a-row :gutter="24" class="aRow">
+                <a-col :sm="24" :md="12" :xl="6">
                     <a-form-item label="用户名">
                         <a-input
                             v-decorator="['userName', {
@@ -22,7 +22,7 @@
                         />
                     </a-form-item>
                 </a-col>
-                <a-col :span="6">
+                <a-col :sm="24" :md="12" :xl="6">
                     <a-form-item label="角色">
                         <a-select
                             mode="multiple"
@@ -47,7 +47,7 @@
                         </a-select>
                     </a-form-item>
                 </a-col>
-                <a-col :span="6">
+                <a-col :sm="24" :md="12" :xl="6">
                     <a-form-item label="密码">
                         <a-input-password
                             :visibilityToggle="false"
@@ -64,9 +64,7 @@
                         />
                     </a-form-item>
                 </a-col>
-            </a-row>
-            <a-row>
-                <a-col :span="6">
+                <a-col :sm="24" :md="12" :xl="6">
                     <a-form-item label="状态">
                         <a-radio-group v-decorator="['state', {
                             initialValue: '1'
@@ -78,8 +76,8 @@
                 </a-col>
             </a-row>
             <div class="formTitle">个人信息</div>
-            <a-row :gutter="24">
-                <a-col :span="6">
+            <a-row :gutter="24" class="aRow">
+                <a-col :sm="24" :md="12" :xl="6">
                     <a-form-item label="教师姓名">
                         <a-input
                             v-decorator="['realName', {
@@ -95,7 +93,7 @@
                         />
                     </a-form-item>
                 </a-col>
-                <a-col :span="6">
+                <a-col :sm="24" :md="12" :xl="6">
                     <a-form-item label="单位">
                         <a-input
                             v-decorator="['userGroup']"
@@ -103,7 +101,7 @@
                         />
                     </a-form-item>
                 </a-col>
-                <a-col :span="6">
+                <a-col :sm="24" :md="12" :xl="6">
                     <a-form-item label="类型">
                         <a-select
                             v-decorator="['userGroupType']"
@@ -119,7 +117,7 @@
                         </a-select>
                     </a-form-item>
                 </a-col>
-                <a-col :span="6">
+                <a-col :sm="24" :md="12" :xl="6">
                     <a-form-item label="课程名称">
                         <a-select
                              mode="multiple"
@@ -138,8 +136,8 @@
                     </a-form-item>
                 </a-col>
             </a-row>
-            <a-row :gutter="24">
-                <a-col :span="6">
+            <a-row :gutter="24" class="aRow">
+                <a-col :sm="24" :md="12" :xl="6">
                     <a-form-item label="手机号">
                         <a-input
                             v-decorator="['mobile']"
@@ -147,7 +145,7 @@
                         />
                     </a-form-item>
                 </a-col>
-                <a-col :span="6">
+                <a-col :sm="24" :md="12" :xl="6">
                     <a-form-item label="身份证号">
                         <a-input
                             v-decorator="['cardNumber']"
@@ -155,7 +153,7 @@
                         />
                     </a-form-item>
                 </a-col>
-                <a-col :span="6">
+                <a-col :sm="24" :md="12" :xl="6">
                     <a-form-item label="学号/工号">
                         <a-input
                             v-decorator="['studentId']"
@@ -165,8 +163,8 @@
                 </a-col>
             </a-row>
             <div class="formTitle">银行卡信息</div>
-            <a-row :gutter="24">
-                <a-col :span="6">
+            <a-row :gutter="24" class="aRow">
+                <a-col :sm="24" :md="12" :xl="6">
                     <a-form-item label="开户行">
                         <a-input
                             v-decorator="['bankName']"
@@ -174,7 +172,7 @@
                         />
                     </a-form-item>
                 </a-col>
-                <a-col :span="6">
+                <a-col :sm="24" :md="12" :xl="6">
                     <a-form-item label="开户行所在地">
                         <a-cascader
                             v-decorator="[
@@ -190,7 +188,7 @@
                         />
                     </a-form-item>
                 </a-col>
-                <a-col :span="6">
+                <a-col :sm="24" :md="12" :xl="6">
                     <a-form-item label="银行卡号">
                         <a-input
                             v-decorator="['bankCardNumber']"
@@ -199,8 +197,8 @@
                     </a-form-item>
                 </a-col>
             </a-row>
-            <a-row>
-                <a-col>
+            <a-row class="aRow pageBtn">
+                <a-col :sm="24" :md="12" :xl="6">
                     <a-button @click="historyBack">
                         返回
                     </a-button>
@@ -351,4 +349,19 @@ export default {
 </script>
 
 <style lang="less">
+.formTitle {
+    font-size: 17px;
+    color: rgba(0,0,0,.85);
+    padding-bottom: 15px;
+    padding-left: 5px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #e8e8e8;
+}
+.aRow {
+    padding-left: 15px;
+}
+.pageBtn {
+    padding-top: 20px;
+    border-top: 1px solid #e8e8e8;
+}
 </style>

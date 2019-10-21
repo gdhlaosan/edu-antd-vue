@@ -16,9 +16,9 @@
         @openChange="onOpenChange"
         :defaultSelectedKeys="defaultSelectedKeys"
     >
-      <a-sub-menu v-for="menu in authorizeMenu" :key="menu.pId">
+      <a-sub-menu v-for="(menu, index) in authorizeMenu" :key="menu.pId">
         <span slot="title">
-          <a-icon type="mail" />
+          <a-icon :type="iconList[index]" />
           <span>{{menu.realName}}</span>
         </span>
         <a-menu-item
@@ -33,6 +33,8 @@
 
 <script>
 import { siderWidth } from '@/assets/common/common.js'
+
+const iconList = ['mail', 'calendar', 'appstore', 'setting', 'pie-chart', 'area-chart', 'calculator']
 
 export default {
   computed: {
@@ -57,6 +59,7 @@ export default {
   data () {
     return {
       siderWidth: siderWidth,
+      iconList,
       openKeys: this.$route.meta.preKey ? [this.$route.meta.preKey] : [] // 展开的菜单项
     }
   },
@@ -86,12 +89,13 @@ export default {
   overflow: auto;
   box-shadow: 2px 0 8px 0 rgba(29, 35, 41, 0.05);
   .logo {
-    height: 32px;
+    height: 64px;
     line-height: 32px;
     text-align: center;
-    margin: 16px;
+    padding: 16px;
     font-size: 18px;
     font-weight: bold;
+    background-color: #e6f7ff;
     .logo-img {
       color: @primary-color;
     }

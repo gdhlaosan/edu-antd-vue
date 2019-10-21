@@ -8,7 +8,7 @@
       :form="form"
     >
       <a-row :gutter="24">
-          <a-col :span="6">
+          <a-col :md="6" :sm="24">
             <a-form-item label="角色">
                 <a-select
                     v-decorator="['roleId', {
@@ -25,7 +25,7 @@
                 </a-select>
             </a-form-item>
           </a-col>
-        <a-col :span="6">
+        <a-col :md="6" :sm="24">
           <a-form-item label="教师信息">
             <a-input
                 v-decorator="['keyword']"
@@ -229,10 +229,16 @@ export default {
 
 .ant-advanced-search-form .ant-form-item {
   display: flex;
-}
-
-.ant-advanced-search-form .ant-form-item-control-wrapper {
+  .ant-form-item-label {
+    line-height: 32px;
+    padding-right: 8px;
+    width: auto;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .ant-form-item-control-wrapper {
   flex: 1;
+  }
 }
 
 #components-form-demo-advanced-search .ant-form {
@@ -245,6 +251,9 @@ export default {
   background-color: #fafafa;
   min-height: 200px;
   padding: 0 10px;
+  .ant-table {
+    overflow-x: auto;
+  }
 }
 
 .courseName {
@@ -263,4 +272,8 @@ export default {
     margin: 0 5px;
   }
 }
+.ant-table td {
+    white-space: nowrap;
+}
+
 </style>
