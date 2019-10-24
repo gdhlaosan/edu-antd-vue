@@ -1,4 +1,5 @@
 import store from '@/store'
+import { windowSize } from '@/config/config'
 
 export const siderWidth = '256' // layout-sider宽度
 
@@ -14,10 +15,12 @@ function debounce (fn, wait) {
 // 处理函数
 function windowRisize () {
   let windowWidth = document.documentElement.clientWidth
-  if (windowWidth <= 960) {
-    store.commit('windowResize', true)
+  if (windowWidth <= windowSize.middleSize && windowWidth >= windowSize.mobileSize) {
+    store.commit('windowResize', 'isMiddle')
+  } else if (windowWidth < windowSize.mobileSize) {
+    store.commit('windowResize', 'isMobile')
   } else {
-    store.commit('windowResize', false)
+    store.commit('windowResize', 'isPc')
   }
 }
 // 监听窗口缩放

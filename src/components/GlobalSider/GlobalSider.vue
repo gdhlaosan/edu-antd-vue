@@ -76,6 +76,7 @@ export default {
     },
     changeRouter (changeRouter) {
       this.$router.push(changeRouter)
+      this.$store.commit('changeSiderVisible')
     }
   }
 }

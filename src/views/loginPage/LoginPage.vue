@@ -25,6 +25,7 @@ export default {
         _this.$store.dispatch('getSiderData').then((data) => {
           _this.loading = false
           _this.$router.$addRoutes(data) // 调取自定义添加路由方法
+          console.log(data)
           _this.$router.push('/layout')
         })
       }, 500)

@@ -11,12 +11,15 @@ const constantRouterMap = [{
 }]
 
 const router = new Router({
+  mode: 'history',
   base: process.env.BASE_URL,
   routes: constantRouterMap
 })
 
 router.$addRoutes = (params) => {
   router.matcher = new Router({ // 重置路由规则
+    mode: 'history',
+    base: process.env.BASE_URL,
     routes: constantRouterMap
   }).matcher
   router.addRoutes(params) // 添加路由

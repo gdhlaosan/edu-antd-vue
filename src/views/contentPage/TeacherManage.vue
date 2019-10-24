@@ -8,7 +8,7 @@
       :form="form"
     >
       <a-row :gutter="24">
-          <a-col :md="6" :sm="24">
+          <a-col :sm="24" :md="8" :lg="6">
             <a-form-item label="角色">
                 <a-select
                     v-decorator="['roleId', {
@@ -25,7 +25,7 @@
                 </a-select>
             </a-form-item>
           </a-col>
-        <a-col :md="6" :sm="24">
+        <a-col :sm="24" :md="8" :lg="6">
           <a-form-item label="教师信息">
             <a-input
                 v-decorator="['keyword']"
@@ -56,8 +56,8 @@
     </a-form>
     <div class="btnList">
       <a-button type="primary" @click="editTeacher('')">新建</a-button>
-      <!-- <a-button type="primary">导入</a-button>
-      <a-button type="primary">导出</a-button> -->
+      <!-- <a-button type="primary">导入</a-button> -->
+      <a-button type="primary" @click="exportFile">导出</a-button>
     </div>
     <div class="search-result-list">
       <a-table
@@ -177,6 +177,7 @@ export default {
       this.loading = true
       this.form.validateFields((error, values) => {
         if (!error) {
+          this.searchPara = values
           // 查询表格数据
           Object.assign(values, this.pagePara, params)
           // 格式化参数
@@ -215,6 +216,25 @@ export default {
     // 新建/修改教师
     editTeacher (userId) {
       this.$router.push({ path: 'teacherManageEdit', query: { userId } })
+    },
+    // 导出
+    exportFile () {
+      this.form.validateFields((error, values) => {
+        if (!error) {
+          const searchPara = this.formatPara(values)
+          this.$http.fetchPost(`${this.API}/Teacher/ExportTeacherCourseJson`, searchPara).then((oJson) => {
+            if (oJson.data.state) {
+              this.$message.success('导出成功！')
+              window.open(oJson.data.fileName)
+            } else {
+              this.$error({
+                centered: true,
+                title: '导出失败'
+              })
+            }
+          })
+        }
+      })
     }
   }
 }
@@ -230,14 +250,14 @@ export default {
 .ant-advanced-search-form .ant-form-item {
   display: flex;
   .ant-form-item-label {
-    line-height: 32px;
+    line-height: 38px;
     padding-right: 8px;
-    width: auto;
+    width: 80px;
     overflow: hidden;
     white-space: nowrap;
   }
   .ant-form-item-control-wrapper {
-  flex: 1;
+    flex: 1;
   }
 }
 

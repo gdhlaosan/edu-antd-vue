@@ -2,23 +2,40 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import $http from '@/https.js'
-import { API } from '@/config/config.js'
+import { API, windowSize } from '@/config/config.js'
 import extraRoutes from './extraRoutes.js'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    collapsed: document.documentElement.clientWidth <= 960, // 菜单开闭状态
+    collapsed: document.documentElement.clientWidth <= windowSize.middleSize, // 菜单开闭状态
     authorizeMenu: JSON.parse(localStorage.getItem('siderData')) || [],
-    userId: ''
+    userId: '',
+    isMobile: document.documentElement.clientWidth <= windowSize.mobileSize,
+    visible: false
   },
   mutations: {
     changeCollapsed (state) {
-      state.collapsed = !state.collapsed
+      if (state.isMobile) {
+        state.collapsed = false
+        state.visible = !state.visible
+      } else {
+        state.collapsed = !state.collapsed
+      }
     },
     windowResize (state, flag) {
-      state.collapsed = flag
+      if (flag === 'isPc') {
+        state.collapsed = false
+        state.isMobile = false
+      } else if (flag === 'isMiddle') {
+        state.collapsed = true
+        state.isMobile = false
+      } else if (flag === 'isMobile') {
+        state.collapsed = true
+        state.isMobile = true
+        state.visible = false
+      }
     },
     changeSiderData (state, data) {
       state.authorizeMenu = data
@@ -30,6 +47,9 @@ export default new Vuex.Store({
       state.userId = ''
       localStorage.removeItem('userId')
       localStorage.removeItem('siderData')
+    },
+    changeSiderVisible (state) {
+      state.visible = false
     }
   },
   getters: {

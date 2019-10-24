@@ -1,11 +1,20 @@
 <template>
   <a-layout id="layOut">
-    <global-sider></global-sider>
+    <a-drawer
+      placement="left"
+      :closable="false"
+      @close="onClose"
+      :visible="visible"
+      v-if="isMobile"
+    >
+      <global-sider></global-sider>
+    </a-drawer>
+    <global-sider v-else></global-sider>
     <a-layout
       :style="{marginLeft: mainLeft}"
       class="layoutMain"
     >
-      <global-header class="layoutHeader" :style="{width: `calc(100% - ${mainLeft})`}"></global-header>
+      <global-header class="layoutHeader" :style="{width: isMobile ? '100%' : `calc(100% - ${mainLeft})`}"></global-header>
       <a-layout class="layoutWapper">
         <!-- <global-menu class="layoutMenu" :style="{width: `calc(100% - ${mainLeft})`}"></global-menu> -->
         <global-content class="layoutcontent"></global-content>
@@ -30,7 +39,23 @@ export default {
   },
   computed: {
     mainLeft () {
-      return this.$store.state.collapsed ? '80px' : `${siderWidth}px`
+      let isMobile = this.$store.state.isMobile
+      if (isMobile) {
+        return '0'
+      } else {
+        return this.$store.state.collapsed ? '80px' : `${siderWidth}px`
+      }
+    },
+    isMobile () {
+      return this.$store.state.isMobile
+    },
+    visible () {
+      return this.$store.state.visible
+    }
+  },
+  methods: {
+    onClose () {
+      this.$store.commit('changeSiderVisible')
     }
   }
 }
@@ -64,6 +89,11 @@ export default {
       padding: 24px;
       background: #ffffff;
     }
+  }
 }
+@media screen and (max-width: 560px) {
+    .layoutcontent {
+        margin: 16px 0 24px 0!important;
+    }
 }
 </style>
