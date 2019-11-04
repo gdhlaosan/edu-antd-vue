@@ -2,9 +2,9 @@ import axios from 'axios'
 // import qs from 'qs'
 
 axios.defaults.timeout = 5000 // 响应时间
-axios.defaults.headers.post['Content-Type'] = 'text/html; charset=utf-8' // 配置请求头
+axios.defaults.headers.post['Content-Type'] = 'application/json' // 配置请求头
 if (process.env.NODE_ENV === 'production') { // 服务器环境
-  axios.defaults.baseURL = 'http://172.16.17.44:40020' // 配置接口地址
+  axios.defaults.baseURL = 'http://172.16.16.212:40020/Api' // 配置接口地址
 }
 // 让 axios 请求接口时带上cookie
 axios.defaults.withCredentials = true

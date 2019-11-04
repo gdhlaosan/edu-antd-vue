@@ -27,6 +27,7 @@
                         <a-select
                             mode="multiple"
                             :filterOption="filterOption"
+                            showArrow
                             v-decorator="['roleId', {
                                 rules: [
                                     {
@@ -122,6 +123,7 @@
                         <a-select
                              mode="multiple"
                             :filterOption="filterOption"
+                            showArrow
                             v-decorator="['courseCode']"
                             placeholder="请选择"
                         >
@@ -239,13 +241,13 @@ const residences = [
   }
 ]
 const userGroupType = [{
-  id: '0',
+  id: 0,
   text: '本校学生'
 }, {
-  id: '1',
+  id: 1,
   text: '本校职工'
 }, {
-  id: '2',
+  id: 2,
   text: '非本校'
 }]
 export default {
@@ -262,7 +264,7 @@ export default {
   },
   mounted () {
     // 获取角色数据
-    this.$http.fetchGet(`${this.API}/Role/GetRoleSelectJsonByRoleType`, {
+    this.$http.fetchPost(`${this.API}/Role/GetRoleSelectJsonByRoleType`, {
       roleType: 2,
       _: Math.random()
     }).then((oJson) => {
@@ -273,7 +275,7 @@ export default {
       }
     })
     // 获取课程名称
-    this.$http.fetchGet(`${this.API}/Teacher/GetCourseJson`, {
+    this.$http.fetchPost(`${this.API}/Teacher/GetCourseJson`, {
       _: Math.random()
     }).then((oJson) => {
       this.courseList = oJson.data
@@ -282,7 +284,7 @@ export default {
     if (this.$route.query.userId) {
       // 是编辑 请求教师默认数据
       // 获取教师信息
-      this.$http.fetchGet(`${this.API}/Teacher/GetFormJson`, {
+      this.$http.fetchPost(`${this.API}/Teacher/GetFormJson`, {
         userId: this.$route.query.userId,
         _: Math.random()
       }).then((oJson) => {
@@ -313,8 +315,9 @@ export default {
           para.bankProvince = para.residence[0]
           para.bankCity = para.residence[1]
           para.userType = '2'
+          para.keyValue = this.$route.query.userId
           delete para.residence
-          this.$http.fetchPost(`${this.API}/Teacher/SubmitForm?keyValue=${this.$route.query.userId}`, para).then((oJson) => {
+          this.$http.fetchPost(`${this.API}/Teacher/SubmitForm`, para).then((oJson) => {
             if (oJson.data.state === 'success') {
               this.$message.success(oJson.data.message)
               this.$router.push('TeacherManage')

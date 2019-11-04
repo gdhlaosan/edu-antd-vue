@@ -23,7 +23,7 @@ module.exports = {
   devServer: {
     proxy: process.env.NODE_ENV === 'production' ? {} : {
       '/api': {
-        target: 'http://172.16.17.44:40020',
+        target: 'http://172.16.16.212:40020/Api',
         changeOrigin: true,
         ws: true,
         pathRewrite: {

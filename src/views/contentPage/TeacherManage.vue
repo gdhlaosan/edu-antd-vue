@@ -57,7 +57,7 @@
     <div class="btnList">
       <a-button type="primary" @click="editTeacher('')">新建</a-button>
       <!-- <a-button type="primary">导入</a-button> -->
-      <a-button type="primary" @click="exportFile">导出</a-button>
+      <!-- <a-button type="primary" @click="exportFile">导出</a-button> -->
     </div>
     <div class="search-result-list">
       <a-table
@@ -148,7 +148,7 @@ export default {
       this.form.resetFields()
     },
     _getUserList () {
-      this.$http.fetchGet(`${this.API}/Role/GetRoleSelectJsonByRoleType`, {
+      this.$http.fetchPost(`${this.API}/Role/GetRoleSelectJsonByRoleType`, {
         roleType: 2,
         _: Math.random()
       }).then((oJson) => {
@@ -182,7 +182,7 @@ export default {
           Object.assign(values, this.pagePara, params)
           // 格式化参数
           const para = this.formatPara(values)
-          this.$http.fetchGet(`${this.API}/Teacher/GetTeacherCourseGridJson`, para).then((oJson) => {
+          this.$http.fetchPost(`${this.API}/Teacher/GetTeacherCourseGridJson`, para).then((oJson) => {
             this.data = oJson.data.rows
             const pagination = { ...this.pagination }
             pagination.total = oJson.data.records
@@ -292,7 +292,7 @@ export default {
     margin: 0 5px;
   }
 }
-.ant-table td {
+.ant-table td, .ant-table th {
     white-space: nowrap;
 }
 

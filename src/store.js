@@ -11,7 +11,7 @@ export default new Vuex.Store({
   state: {
     collapsed: document.documentElement.clientWidth <= windowSize.middleSize, // 菜单开闭状态
     authorizeMenu: JSON.parse(localStorage.getItem('siderData')) || [],
-    userId: '',
+    oms_token: '',
     isMobile: document.documentElement.clientWidth <= windowSize.mobileSize,
     visible: false
   },
@@ -40,12 +40,12 @@ export default new Vuex.Store({
     changeSiderData (state, data) {
       state.authorizeMenu = data
     },
-    recordUserId (state, data) {
-      state.userId = data
+    recordOmsToken (state, data) {
+      state.oms_token = data
     },
     signOut (state) {
-      state.userId = ''
-      localStorage.removeItem('userId')
+      state.oms_token = ''
+      localStorage.removeItem('oms_token')
       localStorage.removeItem('siderData')
     },
     changeSiderVisible (state) {
