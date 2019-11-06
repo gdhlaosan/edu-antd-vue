@@ -2,7 +2,7 @@
 <div class="loginPage">
   <a-row>
     <a-col>
-      <a-form class="loginForm" :form="form">
+      <a-form class="loginForm" :form="form" @submit="login">
         <a-form-item>
           <span class="loginTitle">登录</span>
         </a-form-item>
@@ -34,7 +34,7 @@
         <a-form-item>
           <a-row>
             <a-col>
-              <a-button :loading="loading" size="large" type="primary" @click="login" class="login-button">
+              <a-button htmlType="submit" :loading="loading" size="large" type="primary" class="login-button">
                 登录
               </a-button>
             </a-col>
@@ -63,7 +63,8 @@ export default {
     }
   },
   methods: {
-    login () {
+    login (e) {
+      e.preventDefault()
       this.form.validateFields((err, loginPara) => {
         if (!err) {
           this.loading = true
@@ -89,20 +90,6 @@ export default {
           })
         }
       })
-      // const _this = this
-      // setTimeout(() => {
-      //   // 记录登录后的userId
-      //   const userId = 'gaodonghao'
-      //   _this.$store.commit('recordUserId', userId)
-      //   localStorage.setItem('userId', userId)
-
-      //   _this.$store.dispatch('getSiderData').then((data) => {
-      //     _this.loading = false
-      //     _this.$router.$addRoutes(data) // 调取自定义添加路由方法
-      //     console.log(data)
-      //     _this.$router.push('/layout')
-      //   })
-      // }, 500)
     },
     // 换验证码
     changeImgCode () {
